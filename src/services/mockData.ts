@@ -9,12 +9,11 @@ export interface User {
 }
 
 export interface UserFilters {
-    name?: string;
-    email?: string;
-    department?: string;
-    status?: string;
+    name: string;
+    email: string;
+    department: string;
+    status: string;
 }
-
 // Simple mock data
 const users: User[] = Array.from({ length: 1000 }, (_, i) => ({
     id: i + 1,
@@ -29,7 +28,7 @@ export const fetchUsers = async (
     page: number,
     signal: AbortSignal,
     pageSize: number = 15,
-    filters: UserFilters = {}
+    filters: UserFilters
 ): Promise<PaginatedResponse<User>> => {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 300));

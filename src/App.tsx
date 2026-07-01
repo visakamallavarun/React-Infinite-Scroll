@@ -19,10 +19,11 @@ import {
   GenericFilterBar,
 } from "./components/GenericFilterBarProps";
 import { useGenericInfiniteQuery } from "./hooks/useGenericInfiniteQuery";
-import { fetchUsers, type User } from "./services/mockData";
+import { fetchUsers, UserFilters, type User } from "./services/mockData";
 import "./App.css";
 
 export const DEFAULT_MAX_PAGES = 10;
+export const DEFAULT_PAGE_SIZE = 20;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -72,13 +73,6 @@ const columns: TableProps<User>["columns"] = [
     },
   },
 ];
-
-type UserFilters = {
-  name: string;
-  email: string;
-  department: string;
-  status: string;
-};
 
 const departmentOptions = [
   { id: 0, description: "All" },
@@ -146,7 +140,7 @@ function AppContent() {
   const query = useGenericInfiniteQuery({
     queryKey: ["users", appliedFilters],
     fetchFn: (pageParam, signal) =>
-      fetchUsers(pageParam, signal, 15, {
+      fetchUsers(pageParam, signal, DEFAULT_PAGE_SIZE, {
         name: appliedFilters.name,
         email: appliedFilters.email,
         department:
@@ -226,7 +220,11 @@ function AppContent() {
         </Layout.Header>
 
         <Layout.Content className="app-main">
-          <Space direction="vertical" style={{ width: "100%" }} size="large">
+          <Space
+            direction="vertical"
+            style={{ width: "100%", display: "flex", minHeight: 0 }}
+            size="large"
+          >
             <GenericFilterBar<UserFilters>
               config={filterConfig}
               filterValues={filterValues}
@@ -249,7 +247,6 @@ function AppContent() {
               fetchPreviousPage={fetchPreviousPage}
               columns={columns}
               rowKey="id"
-              scroll={{ x: 700 }}
               filterParams={JSON.stringify(appliedFilters)}
             />
           </Space>
