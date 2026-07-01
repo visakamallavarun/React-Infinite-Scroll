@@ -83,7 +83,6 @@ const departmentOptions = [
 ];
 
 const statusOptions = [
-  { id: 0, description: "All" },
   { id: 1, description: "Active" },
   { id: 2, description: "Inactive" },
   { id: 3, description: "On Leave" },
