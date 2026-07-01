@@ -5,6 +5,7 @@ export interface User {
     name: string;
     email: string;
     department: string;
+    joinedDate: string;
     status: "Active" | "Inactive" | "On Leave";
 }
 
@@ -13,6 +14,7 @@ export interface UserFilters {
     email: string;
     department: string;
     status: string;
+    joinedDate: string;
 }
 // Simple mock data
 const users: User[] = Array.from({ length: 1000 }, (_, i) => ({
@@ -20,6 +22,7 @@ const users: User[] = Array.from({ length: 1000 }, (_, i) => ({
     name: `User ${i + 1}`,
     email: `user${i + 1}@example.com`,
     department: ["Engineering", "Sales", "HR", "Marketing"][i % 4],
+    joinedDate: new Date(2023, 0, 1 + (i % 365)).toISOString().split("T")[0],
     status: ["Active", "Inactive", "On Leave"][i % 3] as "Active" | "Inactive" | "On Leave",
 }));
 
@@ -40,7 +43,8 @@ export const fetchUsers = async (
         const byEmail = !filters.email || user.email.toLowerCase().includes(filters.email.toLowerCase());
         const byDepartment = !filters.department || user.department === filters.department;
         const byStatus = !filters.status || user.status === filters.status;
-        return byName && byEmail && byDepartment && byStatus;
+        const byJoinedDate = !filters.joinedDate || user.joinedDate === filters.joinedDate;
+        return byName && byEmail && byDepartment && byStatus && byJoinedDate;
     });
 
     const startIdx = (page - 1) * pageSize;

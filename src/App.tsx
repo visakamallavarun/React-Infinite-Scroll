@@ -59,6 +59,12 @@ const columns: TableProps<User>["columns"] = [
     width: 140,
   },
   {
+    title: "Joined Date",
+    dataIndex: "joinedDate",
+    key: "joinedDate",
+    width: 140,
+  },
+  {
     title: "Status",
     dataIndex: "status",
     key: "status",
@@ -113,6 +119,12 @@ const filterConfig: FilterConfig<UserFilters>[] = [
     label: "Status",
     options: statusOptions,
   },
+  {
+    type: FilterType.Date,
+    name: "joinedDate",
+    label: "Joined Date",
+    placeholder: "Select date",
+  },
 ];
 
 const defaultFilters: UserFilters = {
@@ -120,6 +132,7 @@ const defaultFilters: UserFilters = {
   email: "",
   department: "0",
   status: "",
+  joinedDate: "",
 };
 
 function AppContent() {
@@ -148,6 +161,7 @@ function AppContent() {
             : "",
         status:
           selectedStatus && selectedStatus !== "All" ? selectedStatus : "",
+        joinedDate: appliedFilters.joinedDate,
       }),
     enabled: true,
   });

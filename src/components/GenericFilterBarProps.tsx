@@ -15,6 +15,7 @@ export enum FilterType {
   Text = "text",
   Select = "select",
   MultiSelect = "multi-select",
+  Date = "date",
   DateRange = "date-range",
 }
 
@@ -40,6 +41,9 @@ type MultiSelectFilterConfig<T> = BaseFilterConfig<T> & {
   type: FilterType.MultiSelect;
   options: (string | lookup)[];
 };
+type DateFilterConfig<T> = BaseFilterConfig<T> & {
+  type: FilterType.Date;
+};
 type DateRangeFilterConfig<T> = BaseFilterConfig<{
   [FilterType.DateRange]: string;
 }> & {
@@ -52,6 +56,7 @@ export type FilterConfig<T> =
   | TextFilterConfig<T>
   | SelectFilterConfig<T>
   | MultiSelectFilterConfig<T>
+  | DateFilterConfig<T>
   | DateRangeFilterConfig<T>;
 
 const { RangePicker } = DatePicker;
@@ -60,6 +65,7 @@ const defaultColSpans = {
   [FilterType.Text]: { xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 3 },
   [FilterType.Select]: { xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 3 },
   [FilterType.MultiSelect]: { xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 3 },
+  [FilterType.Date]: { xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 3 },
   [FilterType.DateRange]: { xs: 24, sm: 12, md: 8, lg: 8, xl: 5, xxl: 4 }, // More space for DateRange
 };
 
@@ -138,6 +144,26 @@ export function GenericFilterBar<T>({
             options={item.options as lookup[]}
             multiple
           />
+        );
+      }
+      case FilterType.Date: {
+        const selectedDate = filterValues[item.name as keyof T]
+          ? dayjs(filterValues[item.name as keyof T] as string)
+          : null;
+
+        return (
+          <Flex vertical>
+            <Typography.Text>{item.label}</Typography.Text>
+            <DatePicker
+              value={selectedDate}
+              onChange={(date) =>
+                onFilterChange(
+                  item.name as keyof T,
+                  date ? date.format("YYYY-MM-DD") : "",
+                )
+              }
+            />
+          </Flex>
         );
       }
       case FilterType.DateRange: {
