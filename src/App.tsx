@@ -119,7 +119,7 @@ const defaultFilters: UserFilters = {
   name: "",
   email: "",
   department: "0",
-  status: "0",
+  status: "",
 };
 
 function AppContent() {
